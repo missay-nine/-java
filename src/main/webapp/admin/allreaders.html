@@ -1,0 +1,97 @@
+<html>
+<head>
+    <title>全部读者</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/jquery-3.2.1.js"></script>
+    <script src="../js/bootstrap.min.js" ></script>
+    <style>
+        body{
+            background-color: rgb(240,242,245);
+        }
+    </style>
+    <script type="text/javascript">
+
+        window.onload=function () {
+            //加载所有的读者信息列表
+            showReaders();
+        };
+
+        function showReaders() {
+            var xhr=new XMLHttpRequest();
+            xhr.onreadystatechange=function () {
+                if(xhr.readyState==4&&xhr.status==200){
+                    var result=xhr.responseText;
+                    //把JSON字符串转JSON对象
+                    var readers=JSON.parse(result);
+                    var htmls="";
+                    for(var i=0;i<readers.length;i++){
+                        htmls=htmls+"<tr>\n" +
+                            "                    <td>"+readers[i].reader_id+"</td>\n" +
+                            "                    <td>"+readers[i].name+"</td>\n" +
+                            "                    <td>"+readers[i].sex+"</td>\n" +
+                            "                    <td>"+readers[i].birth+"</td>\n" +
+                            "                    <td>"+readers[i].address+"</td>\n" +
+                            "                    <td>"+readers[i].telcode+"</td>\n" +
+                            "                    <td><a href=\"reader_edit.html?readerId="+readers[i].reader_id+"\"><button type=\"button\" class=\"btn btn-info btn-xs\">编辑</button></a></td>\n" +
+                            "                </tr>";
+                    }
+                    //把数据填充到tbody中
+                    document.getElementById("bb").innerHTML=htmls;
+                }
+            };
+            var url="/ReaderInfoServlet.do?flag=query";
+            xhr.open("GET",url,true);
+            xhr.send();
+        }
+
+    </script>
+
+</head>
+<body>
+
+<div style="position: relative;top: 15%">
+
+
+</div>
+
+
+<div class="panel panel-default" style="position:relative;top: 80px;width: 90%;margin-left: 5%">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            全部读者
+        </h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-hover" >
+            <thead>
+            <tr>
+                <th>读者号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>生日</th>
+                <th>地址</th>
+                <th>电话</th>
+                <th>编辑</th>
+            </tr>
+            </thead>
+            <tbody id="bb">
+            
+                <!--<tr>
+                    <td>1501014101</td>
+                    <td>张华</td>
+                    <td>男</td>
+                    <td>1995-06-10</td>
+                    <td>天津市</td>
+                    <td>12345678900</td>
+                    <td><a href="reader_edit.html?readerId=1501014101"><button type="button" class="btn btn-info btn-xs">编辑</button></a></td>
+                    <td><a href="reader_delete.html?readerId=1501014101"><button type="button" class="btn btn-danger btn-xs">删除</button></a></td>
+                </tr>-->
+
+            
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

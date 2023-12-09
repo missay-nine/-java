@@ -1,0 +1,116 @@
+<html>
+<head>
+    <title id="name3">《 大雪中的山庄》</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/jquery-3.2.1.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color: rgb(240, 242, 245);
+        }
+    </style>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            //页面加载的时候，根据发送过来的ID值查询一个图书对象
+            //浏览器的地址：http://localhost:8080/admin/bookdetail.html?bookId=50000007
+            var url = window.location.href;
+            var book_id=url.split("=")[1];
+            //根据bookId发送Ajax异步请求,查询一个对象数据显示
+            var xhr=new XMLHttpRequest();
+            xhr.onreadystatechange=function () {
+                if(xhr.readyState==4&&xhr.status==200){
+                    var result=xhr.responseText;
+                    //alert(result);
+                    //把JSON字符串转JSON对象
+                    var book=JSON.parse(result);
+                    document.getElementById("name1").innerText=book.name;
+                    document.getElementById("name2").innerText=book.name;
+                    document.getElementById("name3").innerText=book.name;
+                    document.getElementById("author").innerText=book.author;
+                    document.getElementById("publish").innerText=book.publish;
+                    document.getElementById("isbn").innerText=book.isbn;
+                    document.getElementById("introduction").innerText=book.introduction;
+                    document.getElementById("language").innerText=book.language;
+                    document.getElementById("price").innerText=book.price;
+                    document.getElementById("pubdate").innerText=book.pubdate;
+                    document.getElementById("class_id").innerText=book.class_id;
+                    document.getElementById("pressmark").innerText=book.pressmark;
+                    document.getElementById("state").innerText=book.state==1?"在馆":"借出";
+                }
+            };
+            var url="/BookInfoServlet.do?flag=queryDetail&book_id="+book_id;
+            xhr.open("GET",url,true);
+            xhr.send();
+        };
+
+    </script>
+
+</head>
+<body>
+
+<div class="col-xs-6 col-md-offset-3" style="position: relative;top: 10%">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title" id="name1">《 大雪中的山庄》</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                <tr>
+                    <th width="15%">书名</th>
+                    <td id="name2">大雪中的山庄</td>
+                </tr>
+                <tr>
+                    <th>作者</th>
+                    <td id="author">东野圭吾</td>
+                </tr>
+                <tr>
+                    <th>出版社</th>
+                    <td id="publish">北京十月文艺出版社</td>
+                </tr>
+                <tr>
+                    <th>ISBN</th>
+                    <td id="isbn">9787530216835</td>
+                </tr>
+                <tr>
+                    <th>简介</th>
+                    <td id="introduction">东野圭吾长篇小说杰作，中文简体首次出版。
+                        一出没有剧本的舞台剧，为什么能让七个演员赌上全部人生.东野圭吾就是有这样过人的本领，能从充满悬念的案子写出荡气回肠的情感，在极其周密曲折的同时写出人性的黑暗与美丽。
+                        一家与外界隔绝的民宿里，七个演员被要求住满四天，接受导演的考验，但不断有人失踪。难道这并非正常排练，而是有人布下陷阱要杀他们。
+                        那时候我开始喜欢上戏剧和音乐，《大雪中的山庄》一书的灵感就来源于此。我相信这次的诡计肯定会让人大吃一惊。——东野圭吾
+                    </td>
+                </tr>
+                <tr>
+                    <th>语言</th>
+                    <td id="language">中文</td>
+                </tr>
+                <tr>
+                    <th>价格</th>
+                    <td id="price">35.00</td>
+                </tr>
+                <tr>
+                    <th>出版日期</th>
+                    <td id="pubdate">2017-06-01</td>
+                </tr>
+                <tr>
+                    <th>分类号</th>
+                    <td id="class_id">9</td>
+                </tr>
+                <tr>
+                    <th>书架号</th>
+                    <td id="pressmark">13</td>
+                </tr>
+                <tr>
+                    <th>状态</th>
+                    <td id="state">在馆</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<html>
+<head>
+  <title>读者权限管理</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <script src="../js/jquery-3.2.1.js"></script>
+  <script src="../js/bootstrap.min.js" ></script>
+  <style>
+    body{
+      background-color: rgb(240,242,245);
+    }
+  </style>
+  <script type="text/javascript">
+
+    window.onload=function () {
+      //加载所有的读者信息列表
+      showReadersCard();
+    };
+
+    function showReadersCard() {
+      // 定义一个异步对象
+      var xhr=new XMLHttpRequest();
+      xhr.onreadystatechange=function () {
+        if(xhr.readyState==4&&xhr.status==200){
+          var result=xhr.responseText;
+          //把JSON字符串转JSON对象
+          var readerCard =JSON.parse(result);
+          var htmls="";
+          for(var i=0;i<readerCard.length;i++){
+            var count ;
+            var text;
+            if (readerCard[i].card_state === 1) {
+              count = 1;
+              text = "封号";
+              color = "btn-danger";
+            } else {
+              count = 0;
+              text = "解封";
+              color = "btn-success";
+            }
+            htmls=htmls+"<tr>\n" +
+                    "                    <td>"+readerCard[i].reader_id+"</td>\n" +
+                    "                    <td>"+readerCard[i].name+"</td>\n" +
+                    "                    <td>" + (count === 1 ? "正常" : "已封号") + "</td>\n" +
+                    "                    <td><a href='#'><button onclick='limitManage("+readerCard[i].reader_id+",this);' type=\"button\" class=\"btn "+color+" btn-xs\">"+text+"</button></a></td>\n" +
+                    "                    </tr>";
+          }
+          //把数据填充到tbody中
+          document.getElementById("bb").innerHTML=htmls;
+        }
+      };
+      // 发送Post请求
+      var url="/ReaderInfoServlet.do";
+      var datas="flag=queryCard";
+      xhr.open("POST",url,true);
+      xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+      xhr.send(datas);
+    }
+
+    function  limitManage(reader_id,btn) {
+    var text = btn.innerText;
+    if(text=="封号"){
+         if(confirm("确定封号？")){
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange= function (){
+          // 回调函数
+          if (xhr.readyState==4 && xhr.status==200){
+            var result = xhr.responseText;
+            if(result == "1"){
+              alert("封号成功");
+              window.location.reload()
+            }else{
+              alert("封号失败");
+            }
+          }
+        };
+        var  url ="/ReaderInfoServlet.do";
+        var  datas = "flag=limitCard&reader_id="+reader_id;
+        xhr.open("POST",url,true);
+        xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xhr.send(datas);
+       }
+      }else{
+        if(confirm("确定解封？")){
+          var xhr = new XMLHttpRequest();
+          xhr.onreadystatechange= function (){
+            // 回调函数
+            if (xhr.readyState==4 && xhr.status==200){
+              var result = xhr.responseText;
+              if(result == "1"){
+                alert("解封成功");
+                window.location.reload()
+              }else{
+                alert("解封失败");
+              }
+            }
+          };
+          var  url ="/ReaderInfoServlet.do";
+          var   datas = "flag=unLimitCard&reader_id="+reader_id;
+          xhr.open("POST",url,true);
+          xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+          xhr.send(datas);
+        }
+     }
+
+    }
+
+  </script>
+
+</head>
+<body>
+
+<div style="position: relative;top: 15%">
+
+
+</div>
+
+
+<div class="panel panel-default" style="position:relative;top: 80px;width: 90%;margin-left: 5%">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      全部读者卡权限信息
+    </h3>
+  </div>
+  <div class="panel-body">
+    <table class="table table-hover" >
+      <thead>
+      <tr>
+        <th>读者号</th>
+        <th>姓名</th>
+        <th>状态</th>
+        <th>管理</th>
+      </tr>
+      </thead>
+      <tbody id="bb">
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

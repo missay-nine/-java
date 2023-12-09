@@ -1,0 +1,105 @@
+<html>
+<head>
+    <title>编辑读者信息《 1501014101》</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/jquery-3.2.1.js"></script>
+    <script src="../js/bootstrap.min.js" ></script>
+    <style>
+        body{
+            background-color: rgb(240,242,245);
+        }
+    </style>
+    <script type="text/javascript">
+
+        window.onload=function () {
+            var readerId=window.location.href.split("=")[1];
+            //发送Ajax，根据readerId查询reader对象
+            var xhr=new XMLHttpRequest();
+            xhr.onreadystatechange=function () {
+                if(xhr.readyState==4&&xhr.status==200){
+                    var result=xhr.responseText;
+                    //把字符串转JSON对象
+                    var reader=JSON.parse(result);
+                    //表单回显数据
+                    document.getElementById("title").innerText="编辑读者信息《"+reader.reader_id+"》";
+                    document.getElementById("readerId").value=reader.reader_id;
+                    document.getElementById("name").value=reader.name;
+
+                    //性别数组
+                    var sexes=document.getElementsByName("sex");
+                    if(reader.sex=="男"){
+                        sexes[0].checked=true;
+                    }else{
+                        sexes[1].checked=true;
+                    }
+
+                    document.getElementById("birth").value=reader.birth;
+                    document.getElementById("address").value=reader.address;
+                    document.getElementById("telcode").value=reader.telcode;
+                }
+            };
+            var url="/ReaderInfoServlet.do?flag=findById&readerId="+readerId;
+            xhr.open("GET",url,true);
+            xhr.send();
+        };
+
+    </script>
+
+</head>
+<body>
+
+
+<div class="col-xs-6 col-md-offset-3" style="position: relative;top: 10%">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title" id="title">编辑读者信息《1501014101》</h3>
+        </div>
+        <div class="panel-body">
+            <form action="/ReaderInfoServlet.do" method="post" id="readeredit" >
+                <input type="hidden" name="flag" value="edit"/>
+                <div class="input-group">
+                    <span  class="input-group-addon">读者证号</span>
+                    <input readonly="readonly" type="text" class="form-control" name="readerId" id="readerId" value="1501014101">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">姓名</span>
+                    <input type="text" class="form-control" name="name" id="name" value="张华" >
+                </div>
+                <div class="input-group">
+                    <span  class="input-group-addon">性别</span> &nbsp;&nbsp;&nbsp;
+                    <input type="radio"  name="sex"  value="男" > 男
+                    <input type="radio"  name="sex"  value="女" > 女
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">生日</span>
+                    <input type="text" class="form-control" name="birth" id="birth"  value="1995-06-10" >
+                </div>
+                <div class="input-group">
+                    <span  class="input-group-addon">地址</span>
+                    <input type="text" class="form-control" name="address" id="address"  value="天津市" >
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">电话</span>
+                    <input type="text" class="form-control" name="telcode" id="telcode" value="12345678900" >
+                </div>
+                <input type="submit" value="确定" class="btn btn-success btn-sm" class="text-left">
+                <script>
+                    function mySubmit(flag){
+                        return flag;
+                    }
+                    $("#readeredit").submit(function () {
+                        if($("#name").val()==''||$("#author").val()==''||$("#publish").val()==''||$("#isbn").val()==''||$("#introduction").val()==''||$("#language").val()==''||$("#price").val()==''||$("#pubdate").val()==''||$("#classId").val()==''||$("#pressmark").val()==''||$("#state").val()==''){
+                            alert("请填入完整读者信息！");
+                            return mySubmit(false);
+                        }
+                    })
+                </script>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

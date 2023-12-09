@@ -1,0 +1,112 @@
+<html>
+<head>
+    <title>添加读者</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/jquery-3.2.1.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color: rgb(240, 242, 245);
+        }
+    </style>
+    <script type="text/javascript">
+
+        //检查读者的ID
+        function checkReaderId123() {
+            //1.获取用户输入的读者ID
+            var readerId = document.getElementById("readerId").value;
+            if (readerId != "") {
+                //把这个readerId异步ajax发送到后台去验证是否存在
+                //1.创建异步对象(负责发送异步请求)
+                var xhr = new XMLHttpRequest();
+                //2.设置异步对象的回调方法(监听异步对象的状态)
+                xhr.onreadystatechange = function () {
+                    // readyState=4:服务器完成对请求的处理  status=200：响应状态码,成功
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        //服务器响应结果
+                        var result = xhr.responseText; //字符串
+                        //alert("服务器返回的结果:"+result);
+                        if (result=='1'){
+                            document.getElementById("readerText").innerText="读者ID已经存在，重新输入!";
+                            document.getElementById("readerText").style.color="red";
+                        }else{
+                            document.getElementById("readerText").innerText="读者ID可用！";
+                            document.getElementById("readerText").style.color="green";
+                        }
+                    }
+                };
+                // 3、发送到服务器地址
+                var url = "/ReaderInfoServlet.do";
+                //要发送的数据
+                var datas="flag=checkReaderId&readerId="+readerId;
+                // 4.发送post请求
+                xhr.open("POST", url, true);  // true: 异步请求
+                //模拟一个表单请求,参数是在请求体发送的
+                xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                xhr.send(datas);
+            }
+        }
+
+    </script>
+
+</head>
+<body>
+
+
+<div class="col-xs-6 col-md-offset-3" style="position: relative;top: 25%">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">添加读者</h3>
+        </div>
+        <div class="panel-body">
+            <form action="/ReaderInfoServlet.do" method="post" id="readeredit">
+                <input type="hidden" name="flag" value="add"/>
+                <div class="input-group">
+                    <span class="input-group-addon">读者证号</span>
+                    <input type="text" style="width: 450px;" class="form-control" name="readerId" id="readerId" onblur="checkReaderId123();"/>
+                    <span id="readerText"></span>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">姓名</span>
+                    <input type="text" class="form-control" name="name" id="name">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">性别</span>&nbsp;&nbsp;
+                    <input type="radio" name="sex" value="男" checked/> 男
+                    <input type="radio" name="sex" value="女"/> 女
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">生日</span>
+                    <input type="text" class="form-control" name="birth" id="birth">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">地址</span>
+                    <input type="text" class="form-control" name="address" id="address">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">电话</span>
+                    <input type="text" class="form-control" name="telcode" id="telcode">
+                </div>
+                <input type="submit" value="添加" class="btn btn-success btn-sm" class="text-left">
+                <script>
+                    function mySubmit(flag) {
+                        return flag;
+                    }
+
+                    $("#readeredit").submit(function () {
+                        if ($("#name").val() == '' || $("#author").val() == '' || $("#publish").val() == '' || $("#isbn").val() == '' || $("#introduction").val() == '' || $("#language").val() == '' || $("#price").val() == '' || $("#pubdate").val() == '' || $("#classId").val() == '' || $("#pressmark").val() == '' || $("#state").val() == '') {
+                            alert("请填入完整读者信息！");
+                            return mySubmit(false);
+                        }
+                    })
+                </script>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

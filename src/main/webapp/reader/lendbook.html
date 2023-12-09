@@ -1,0 +1,102 @@
+<html>
+<head>
+    <title>借阅《 大雪中的山庄》</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/jquery-3.2.1.js"></script>
+    <script src="../js/bootstrap.min.js" ></script>
+    <style>
+        body{
+            background-color: rgb(240,242,245);
+        }
+    </style>
+    <script type="text/javascript">
+
+        window.onload=function () {
+            var book_id=location.href.split("=")[1];
+            //根据bookId发送Ajax异步请求,查询一个对象数据显示
+            var xhr=new XMLHttpRequest();
+            xhr.onreadystatechange=function () {
+                if(xhr.readyState==4&&xhr.status==200){
+                    var result=xhr.responseText;
+                    //alert(result);
+                    //把JSON字符串转JSON对象
+                    var book=JSON.parse(result);
+                    document.getElementById("name1").innerText=book.name;
+                    document.getElementById("name2").value=book.name;
+                    document.getElementById("book_id").value=book.book_id;
+                    //异步获取读者ID
+                    getReaderId();
+                }
+            };
+            var url="/BookInfoServlet.do?flag=queryDetail&book_id="+book_id;
+            xhr.open("GET",url,true);
+            xhr.send();
+        };
+
+        /**
+         * 异步获取读者ID
+         */
+        function getReaderId() {
+            var xhr=new XMLHttpRequest();
+            xhr.onreadystatechange=function () {
+                if(xhr.readyState==4&&xhr.status==200){
+                    //异步获取session中的ID
+                    var reader_id=xhr.responseText;
+                    document.getElementById("readerId").value=reader_id;
+
+                }
+            };
+            var url="/AdminServlet.do?flag=getReaderId";
+            xhr.open("GET",url,true);
+            xhr.send();
+        }
+
+
+    </script>
+
+</head>
+<body>
+<div class="col-xs-6 col-md-offset-3" style="position: relative;top: 25%">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">借阅《<span id="name1">XXXXX</span>》</h3>
+        </div>
+        <div class="panel-body">
+            <form action="/LendServlet.do" method="post" id="lendbook" >
+                <input type="hidden" name="flag" value="lendBook"/>
+                <div class="input-group">
+                    <span  class="input-group-addon">图书ID</span>
+                    <input type="text" readonly="readonly"  class="form-control" name="book_id" id="book_id" />
+                </div>
+                <br/>
+                <div class="input-group">
+                    <span  class="input-group-addon">图书名</span>
+                    <input type="text" readonly="readonly"  class="form-control" name="name" id="name2" value="大雪中的山庄"/>
+                </div>
+                <br/>
+                <div class="input-group">
+                    <span class="input-group-addon">读者证号</span>
+                    <input type="text" class="form-control" name="readerId" id="readerId" readonly placeholder="借阅人读者证号" >
+                </div>
+                <br/>
+                <input type="submit" value="我要借阅" class="btn btn-success btn-sm" class="text-left">
+                <script>
+                    function mySubmit(flag){
+                        return flag;
+                    }
+                    $("#lendbook").submit(function () {
+                        if($("#name").val()==''||$("#readerId").val()==''){
+                            alert("请填入完整图书信息！");
+                            return mySubmit(false);
+                        }
+                    })
+                </script>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

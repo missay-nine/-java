@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript">
+
+        function f() {
+
+            //1.JSON对象
+            var p = {"id": 9527, "name": "星爷", "age": 50, "sex": "男"};
+
+            //2.JSON的对象数组
+            var persons=[
+                {"id": 9527, "name": "星爷1", "age": 50, "sex": "男"},
+                {"id": 9528, "name": "星爷2", "age": 50, "sex": "男"},
+                {"id": 9529, "name": "星爷3", "age": 50, "sex": "男"},
+                {"id": 9530, "name": "星爷4", "age": 50, "sex": "男"}
+            ];
+
+            //alert(p.name);
+            //alert(persons[2].name);
+
+            //3.复杂的JSON对象
+            var cc={
+                "name": "中国",
+                "province": [{
+                    "name": "黑龙江",
+                    "cities": {
+                        "city": ["哈尔滨", "大庆"]
+                    }
+                }, {
+                    "name": "广东",
+                    "cities": {
+                        "city": ["广州", "深圳", "珠海"]
+                    }
+                }, {
+                    "name": "台湾",
+                    "cities": {
+                        "city": ["台北", "高雄"]
+                    }
+                }, {
+                    "name": "新疆",
+                    "cities": {
+                        "city": ["乌鲁木齐"]
+                    }
+                }]
+            };
+            alert(cc.province[2].cities.city[1]);
+        }
+
+    </script>
+</head>
+<body>
+<input type="button" value="点我" onclick="f()"/>
+</body>
+</html>
